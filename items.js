@@ -1,7 +1,6 @@
-import { ItemType } from "./enums.js";
+const ItemType = require("./enums.js");
 
-
-export let items = [
+let items = [
   {
     id: 0,
     name: "Root",
@@ -165,3 +164,5 @@ export let items = [
     childIds: [],
   },
 ];
+
+module.exports = items;

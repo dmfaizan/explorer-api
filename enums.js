@@ -1,4 +1,4 @@
-export const ItemType = {
+const ItemType = {
   Folder: "Folder",
   Text: "txt",
   PDF: "pdf",
@@ -9,4 +9,6 @@ export const ItemType = {
   MARKDOWN: "md",
   JSON: "json",
   JS: "js",
-}
+};
+
+module.exports = ItemType;

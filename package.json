@@ -17,6 +17,8 @@
   "homepage": "https://github.com/dmfaizan/explorer-api#readme",
   "description": "",
   "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.46",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   }
 }

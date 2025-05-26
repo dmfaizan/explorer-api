@@ -1,7 +1,9 @@
 const express = require("express");
-const items = require("./items.js");
+const { Op } = require("@sequelize/core");
+
 const ItemType = require("./enums.js");
 const sequelize = require("./database.js");
+const Item = require("./models/item.js");
 
 const app = express();
 const router = express.Router();
@@ -16,45 +18,63 @@ router.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-router.get("/folder", (req, res) => {
+router.get("/folder", async (req, res) => {
   const path = req.query.path;
 
-  if (path != undefined) {
-    const folder = items.find((item) => item.name == path);
-    const contents = items.filter((item) => folder.childIds.includes(item.id));
+  const folder = await Item.findOne({
+    where: {
+      path: path,
+    },
+  });
 
-    res.send(contents);
-  } else {
-    res.send(items);
-  }
+  const content = await Item.findAll({
+    where: {
+      id: {
+        [Op.in]: folder.childIds,
+      },
+    },
+  });
+
+  res.send(content);
 });
 
-router.post("/folder", (req, res) => {
+router.post("/folder", async (req, res) => {
   const { path, name } = req.body;
 
-  const newFolder = {
-    id: items.length,
+  const newFolder = Item.build({
     name: name,
     type: ItemType.Folder,
     size: null,
     path: path,
     created: Date.now(),
     childIds: [],
-  };
+  });
 
-  items.push(newFolder);
+  await newFolder.save();
 
-  res.send(items);
+  res.send(newFolder);
 });
 
-router.delete("/item", (req, res) => {
+router.delete("/item", async (req, res) => {
   const { path } = req.body;
 
-  const item = items.find((item) => item.path == path);
-  const index = items.indexOf(item);
-  items.splice(index, 1);
+  const item = await Item.findOne({
+    where: {
+      path: path,
+    },
+  });
 
-  res.send(items);
+  if (!item) {
+    res.send("No item found with that path!");
+  }
+
+  await Item.destroy({
+    where: {
+      path: path,
+    },
+  });
+
+  res.send("Item destroyed!");
 });
 
 sequelize

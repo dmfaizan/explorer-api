@@ -1,0 +1,22 @@
+{
+  "name": "explorer-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dmfaizan/explorer-api.git"
+  },
+  "author": "Daffa Muhammad Faizan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmfaizan/explorer-api/issues"
+  },
+  "homepage": "https://github.com/dmfaizan/explorer-api#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

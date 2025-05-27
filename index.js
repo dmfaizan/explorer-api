@@ -57,6 +57,11 @@ router.post("/folder", async (req, res) => {
         path: parentPath,
       },
     });
+
+    if (!parent) {
+      res.status(404).send(`Folder with path ${path} not found!`)
+    }
+
     parentId = parent.id;
   }
 

@@ -6,12 +6,12 @@ const sequelize = require("./database.js");
 const Item = require("./models/item.js");
 
 const app = express();
-const cors = require('cors')
+const cors = require("cors");
 const router = express.Router();
 const port = 3000;
 
 // ----- App Configurations -----
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use("/api", router);
 
@@ -39,7 +39,10 @@ router.get("/folder", async (req, res) => {
     },
   });
 
-  res.send(content);
+  res.status(200).json({
+    folder: folder,
+    content: content,
+  });
 });
 
 router.post("/folder", async (req, res) => {
@@ -51,8 +54,8 @@ router.post("/folder", async (req, res) => {
   } else {
     // Find parent path
     let parentPath = path.split("/");
-    parentPath.pop()
-    parentPath = parentPath.join("/")
+    parentPath.pop();
+    parentPath = parentPath.join("/");
 
     const parent = await Item.findOne({
       where: {
@@ -61,7 +64,7 @@ router.post("/folder", async (req, res) => {
     });
 
     if (!parent) {
-      res.status(404).send(`Folder with path ${path} not found!`)
+      res.status(404).send(`Folder with path ${path} not found!`);
     }
 
     parentId = parent.id;

@@ -27,11 +27,13 @@ router.get("/folder", async (req, res) => {
     },
   });
 
+  if (!folder) {
+    res.status(404).send(`Folder with path ${path} not found!`);
+  }
+
   const content = await Item.findAll({
     where: {
-      id: {
-        [Op.in]: folder.childIds,
-      },
+      parentId: folder.id,
     },
   });
 
@@ -40,6 +42,23 @@ router.get("/folder", async (req, res) => {
 
 router.post("/folder", async (req, res) => {
   const { path, name } = req.body;
+  let parentId;
+
+  if (path == "~") {
+    parentId = null;
+  } else {
+    // Find parent path
+    let parentPath = path.split("/");
+    parentPath.pop()
+    parentPath = parentPath.join("/")
+
+    const parent = await Item.findOne({
+      where: {
+        path: parentPath,
+      },
+    });
+    parentId = parent.id;
+  }
 
   const newFolder = Item.build({
     name: name,
@@ -47,7 +66,7 @@ router.post("/folder", async (req, res) => {
     size: null,
     path: path,
     created: Date.now(),
-    childIds: [],
+    parentId: parentId,
   });
 
   await newFolder.save();
@@ -65,7 +84,7 @@ router.delete("/item", async (req, res) => {
   });
 
   if (!item) {
-    res.send("No item found with that path!");
+    res.status(404).send(`Item with path ${path} not found!`);
   }
 
   await Item.destroy({

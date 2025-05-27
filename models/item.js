@@ -31,8 +31,35 @@ const Item = db.define("item", {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  childIds: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
+  // childIds: {
+  //   type: DataTypes.ARRAY(DataTypes.INTEGER),
+  // },
+  parentId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+
+Item.hasMany(Item, {
+  as: "children",
+  foreignKey: {
+    name: "parentId",
+    allowNull: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  },
+  inverse: {
+    as: "parent",
+  },
+});
+
+Item.belongsTo(Item, {
+  as: "parent",
+  foreignKey: {
+    name: "parentId",
+    allowNull: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   },
 });
 

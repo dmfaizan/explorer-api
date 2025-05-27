@@ -6,10 +6,12 @@ const sequelize = require("./database.js");
 const Item = require("./models/item.js");
 
 const app = express();
+const cors = require('cors')
 const router = express.Router();
 const port = 3000;
 
 // ----- App Configurations -----
+app.use(cors())
 app.use(express.json());
 app.use("/api", router);
 

@@ -31,9 +31,6 @@ const Item = db.define("item", {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  // childIds: {
-  //   type: DataTypes.ARRAY(DataTypes.INTEGER),
-  // },
   parentId: {
     type: DataTypes.INTEGER,
     allowNull: true,

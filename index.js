@@ -1,5 +1,4 @@
 const express = require("express");
-const { Op } = require("@sequelize/core");
 
 const ItemType = require("./enums.js");
 const sequelize = require("./database.js");
@@ -30,7 +29,7 @@ router.get("/folder", async (req, res) => {
   });
 
   if (!folder) {
-    res.status(404).send(`Folder with path ${path} not found!`);
+    res.status(404).json({ message: `Folder with path ${path} not found!` });
   }
 
   const content = await Item.findAll({
@@ -64,7 +63,7 @@ router.post("/folder", async (req, res) => {
     });
 
     if (!parent) {
-      res.status(404).send(`Folder with path ${path} not found!`);
+      res.status(404).json({ message: `Folder with path ${path} not found!` });
     }
 
     parentId = parent.id;
@@ -94,7 +93,7 @@ router.delete("/item", async (req, res) => {
   });
 
   if (!item) {
-    res.status(404).send(`Item with path ${path} not found!`);
+    res.status(404).json({ message: `Item with path ${path} not found!` });
   }
 
   await Item.destroy({
@@ -103,7 +102,7 @@ router.delete("/item", async (req, res) => {
     },
   });
 
-  res.send("Item destroyed!");
+  res.status(200).json({ message: `Item with path ${path} destroyed!` });
 });
 
 sequelize
